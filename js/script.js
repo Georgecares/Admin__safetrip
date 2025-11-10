@@ -29,7 +29,7 @@ async function loginAdmin(email, password) {
       localStorage.setItem("authToken", token);
       localStorage.setItem("userRole", role);
       localStorage.setItem("isLoggedIn", "true");
-      window.location.href = "admin/index.html";
+      window.location.href = "/admin/index.html"; // Use absolute path
     } else {
       alert("You are not authorized to access the admin dashboard.");
     }
@@ -50,7 +50,7 @@ async function logoutAdmin() {
     console.warn("Logout API call failed but proceeding.");
   }
   localStorage.clear();
-  window.location.href = "../login.html";
+  window.location.href = "/login.html";
 }
 
 // ====== AUTH GUARD ======
@@ -59,20 +59,20 @@ const role = localStorage.getItem("userRole");
 
 // Redirect unauthorized access
 if (
-  window.location.pathname.includes("admin/") &&
+  window.location.pathname.includes("/admin/") &&
   (!token || role !== "admin")
 ) {
   alert("Access denied. Admins only.");
-  window.location.href = "../login.html";
+  window.location.replace("/login.html");
 }
 
 // Redirect logged-in admin away from login page
 if (
-  window.location.pathname.endsWith("login.html") &&
+  window.location.pathname.endsWith("/login.html") &&
   token &&
   role === "admin"
 ) {
-  window.location.href = "admin/index.html";
+  window.location.replace("/admin/index.html");
 }
 
 // ====== LOGIN FORM HANDLER ======
@@ -93,7 +93,7 @@ const themeToggle = document.getElementById("themeToggle");
 const body = document.body;
 if (localStorage.getItem("theme") === "dark") {
   body.classList.add("dark-mode");
-  themeToggle.innerHTML = '<i class="material-icons">dark_mode</i>';
+  themeToggle.innerHTML = '<i class="material-icons">wb_sunny</i>';
 }
 themeToggle?.addEventListener("click", () => {
   body.classList.toggle("dark-mode");
@@ -106,7 +106,7 @@ themeToggle?.addEventListener("click", () => {
 
 // ====== FETCH FUNCTIONS ======
 async function fetchUsers() {
-  if (!token) return (window.location.href = "../login.html");
+  if (!token) return window.location.replace("/login.html");
   try {
     const res = await fetch(USERS_URL, {
       headers: { Authorization: `Bearer ${token}` },
@@ -122,7 +122,7 @@ async function fetchUsers() {
 }
 
 async function fetchSOSAlerts() {
-  if (!token) return;
+  if (!token) return window.location.replace("/login.html");
   try {
     const res = await fetch(SOS_URL, {
       headers: { Authorization: `Bearer ${token}` },
@@ -138,7 +138,7 @@ async function fetchSOSAlerts() {
 }
 
 async function fetchCheckins() {
-  if (!token) return;
+  if (!token) return window.location.replace("/login.html");
   try {
     const res = await fetch(CHECKINS_URL, {
       headers: { Authorization: `Bearer ${token}` },
@@ -154,7 +154,7 @@ async function fetchCheckins() {
 }
 
 async function fetchOverview() {
-  if (!token) return;
+  if (!token) return window.location.replace("/login.html");
   try {
     const res = await fetch(OVERVIEW_URL, {
       headers: { Authorization: `Bearer ${token}` },
@@ -170,8 +170,64 @@ async function fetchOverview() {
   }
 }
 
+// ====== RENDER FUNCTIONS ======
+function renderUsers() {
+  const tbody = document.querySelector("#userTable tbody");
+  tbody.innerHTML = "";
+  users.forEach((user, i) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${i + 1}</td>
+      <td>${user.name}</td>
+      <td>${user.email}</td>
+      <td>${user.role}</td>
+      <td>
+        <button onclick="editUser('${user.id}')">Edit</button>
+        <button onclick="deleteUser('${user.id}')">Delete</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function renderSOSAlerts() {
+  const tbody = document.querySelector("#sosTable tbody");
+  tbody.innerHTML = "";
+  sosAlerts.forEach((alert, i) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${i + 1}</td>
+      <td>${alert.user}</td>
+      <td>${alert.location}</td>
+      <td>${alert.time}</td>
+      <td>${alert.status}</td>
+      <td><button onclick="resolveSOS('${alert.id}')">Resolve</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function renderCheckins() {
+  const tbody = document.querySelector("#checkinTable tbody");
+  tbody.innerHTML = "";
+  checkins.forEach((checkin, i) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${i + 1}</td>
+      <td>${checkin.user}</td>
+      <td>${checkin.location}</td>
+      <td>${checkin.date}</td>
+      <td>${checkin.notes || ""}</td>
+      <td><button onclick="deleteCheckin('${checkin.id}')">Delete</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
 // ====== INIT DASHBOARD ======
-if (window.location.pathname.includes("admin/index.html")) {
+if (window.location.pathname.includes("/admin/index.html")) {
   fetchOverview();
   fetchUsers();
+  fetchSOSAlerts();
+  fetchCheckins();
 }

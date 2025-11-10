@@ -4,25 +4,32 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SafeTrip Admin Login</title>
-    <link rel="stylesheet" href="style.css" />
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="/css/style.css" />
+
+    <!-- Material Icons -->
     <link
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
     />
   </head>
+
   <body class="login-page">
+    <!-- Theme toggle button -->
     <div class="theme-toggle-container">
       <button id="themeToggle" title="Toggle Dark/Light Mode">
         <i class="material-icons">dark_mode</i>
       </button>
     </div>
 
+    <!-- Login Form -->
     <div class="login-container">
       <h2 class="login__title">SafeTrip Admin</h2>
       <p class="login__desc">Log in to manage your platform</p>
 
       <form id="loginForm">
-        <label>Email</label>
+        <label for="loginEmail">Email</label>
         <input
           type="email"
           id="loginEmail"
@@ -30,7 +37,7 @@
           required
         />
 
-        <label>Password</label>
+        <label for="loginPassword">Password</label>
         <input
           type="password"
           id="loginPassword"
@@ -38,16 +45,11 @@
           required
         />
 
-        <button
-          type="submit"
-          class="btn-primary"
-          style="display: flex; justify-content: center"
-        >
-          Login
-        </button>
+        <button type="submit" class="btn-primary">Login</button>
       </form>
     </div>
 
-    <script src="script.js"></script>
+    <!-- JS -->
+    <script src="/js/script.js"></script>
   </body>
 </html>
