@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SafeTrip Admin Dashboard</title>
+    <link rel="stylesheet" href="style.css" />
+    <script
+      src="https://kit.fontawesome.com/a2e0e6ad61.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h2>SafeTrip Admin</h2>
+      <nav>
+        <a href="#" class="active" data-section="dashboard">
+          <i class="fas fa-chart-line"></i> Dashboard
+        </a>
+        <a href="#" data-section="sos">
+          <i class="fas fa-exclamation-triangle"></i> SOS Alerts
+        </a>
+        <a href="#" data-section="checkins">
+          <i class="fas fa-map-marker-alt"></i> Check-ins
+        </a>
+        <a href="#" id="logoutBtn">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="content">
+      <header class="dashboard-header">
+        <h1 id="sectionTitle">Dashboard Overview</h1>
+        <button id="themeToggle" title="Toggle Dark/Light Mode">
+          <i class="fas fa-moon"></i>
+        </button>
+      </header>
+
+      <!-- DASHBOARD SECTION -->
+      <section id="dashboardSection" class="content-section active">
+        <div class="overview-cards">
+          <div class="card">
+            <h3>Total Users</h3>
+            <p id="userCount">--</p>
+          </div>
+          <div class="card">
+            <h3>Total SOS Alerts</h3>
+            <p id="sosCount">--</p>
+          </div>
+          <div class="card">
+            <h3>Total Check-ins</h3>
+            <p id="checkinCount">--</p>
+          </div>
+        </div>
+
+        <section class="users-section">
+          <div class="section-header">
+            <h2>Users</h2>
+            <button class="btn-primary" onclick="openModal()">
+              + Add User
+            </button>
+          </div>
+          <table id="userTable">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </section>
+      </section>
+
+      <!-- SOS ALERTS SECTION -->
+      <section id="sosSection" class="content-section">
+        <div class="section-header">
+          <h2>SOS Alerts</h2>
+        </div>
+        <table id="sosTable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>User</th>
+              <th>Location</th>
+              <th>Time</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+
+      <!-- CHECKINS SECTION -->
+      <section id="checkinsSection" class="content-section">
+        <div class="section-header">
+          <h2>Check-ins</h2>
+        </div>
+        <table id="checkinTable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>User</th>
+              <th>Location</th>
+              <th>Date</th>
+              <th>Notes</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+    </main>
+
+    <!-- MODAL -->
+    <div id="userModal" class="modal">
+      <div class="modal-content">
+        <h3 id="modalTitle">Add User</h3>
+        <form id="userForm">
+          <input type="hidden" id="userId" />
+          <label>Name</label>
+          <input type="text" id="userName" required />
+
+          <label>Email</label>
+          <input type="email" id="userEmail" required />
+
+          <label>Role</label>
+          <select id="userRole">
+            <option>Admin</option>
+            <option>User</option>
+          </select>
+
+          <div class="modal-actions">
+            <button type="submit" class="btn-primary">Save</button>
+            <button type="button" class="btn-secondary" onclick="closeModal()">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

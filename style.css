@@ -1,0 +1,363 @@
+/* ===== ROOT & THEME VARIABLES ===== */
+:root {
+  --color-bg: #f5f5f5;
+  --color-bg-secondary: #ffffff;
+  --color-text: #222;
+  --color-primary: #4caf50;
+  --color-accent: #66bb6a;
+  --color-danger: #e53935;
+  --color-warning: #ffb300;
+}
+
+body.dark-mode {
+  --color-bg: #181818;
+  --color-bg-secondary: #242424;
+  --color-text: #eaeaea;
+  --color-primary: #66bb6a;
+  --color-danger: #ef5350;
+  --color-warning: #ffca28;
+}
+
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+  transition: background 0.3s, color 0.3s;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  width: 230px;
+  background: var(--color-bg-secondary);
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  padding: 1.5rem;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar h2 {
+  margin-bottom: 2rem;
+  font-size: 1.2rem;
+  text-align: center;
+  color: var(--color-primary);
+}
+
+.sidebar nav a {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  color: var(--color-text);
+  text-decoration: none;
+  padding: 0.8rem 0.5rem;
+  border-radius: 6px;
+  transition: background 0.3s, color 0.3s;
+}
+
+.sidebar nav a:hover,
+.sidebar nav a.active {
+  color: white;
+  background: var(--color-primary);
+}
+
+/* ===== MAIN CONTENT ===== */
+.content {
+  margin-left: 250px;
+  padding: 2rem;
+  transition: margin-left 0.3s;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+#themeToggle {
+  background: none;
+  border: none;
+  color: var(--color-text);
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+/* ===== BUTTONS ===== */
+button {
+  cursor: pointer;
+  border: none;
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  transition: background 0.3s;
+}
+
+.btn-primary:hover {
+  background: var(--color-accent);
+}
+
+.btn-secondary {
+  background: #888;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+}
+
+.btn-edit {
+  background: var(--color-warning);
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  margin-right: 4px;
+}
+
+.btn-delete {
+  background: var(--color-danger);
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+}
+
+/* ===== CARDS ===== */
+.overview-cards {
+  display: flex;
+  gap: 1.2rem;
+  margin: 1.5rem 0;
+  flex-wrap: wrap;
+}
+
+.card {
+  flex: 1 1 250px;
+  background: var(--color-bg-secondary);
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* ===== TABLES ===== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--color-bg-secondary);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 0.75rem;
+  border-bottom: 1px solid #ccc;
+}
+
+th {
+  background: var(--color-primary);
+  color: white;
+}
+
+tbody tr:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+body.dark-mode tbody tr:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* ===== SECTIONS ===== */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1.5rem 0 1rem;
+}
+
+.content-section {
+  display: none;
+}
+.content-section.active {
+  display: block;
+}
+
+/* ===== MODAL ===== */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  align-items: center;
+  justify-content: center;
+}
+
+.modal.show {
+  display: flex;
+}
+
+.modal-content {
+  background: var(--color-bg-secondary);
+  color: var(--color-text);
+  padding: 2rem;
+  border-radius: 10px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.modal-content input,
+.modal-content select {
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 4px;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+/* ===== LOGIN PAGE ===== */
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: var(--color-bg);
+  padding: 20px;
+}
+
+.login-container {
+  background: var(--color-bg-secondary);
+  padding: 40px 30px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.login-container h2.login__title {
+  margin: 0 0 10px 0;
+  font-size: 26px;
+  color: var(--color-primary);
+}
+
+.login-container p.login__desc {
+  margin-bottom: 25px;
+  font-size: 14px;
+  color: #666;
+}
+
+.login-container label {
+  display: block;
+  text-align: left;
+  margin-bottom: 5px;
+  margin-top: 15px;
+  font-weight: 600;
+}
+
+.login-container input {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.login-container input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.login-container .btn-primary {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  font-size: 16px;
+}
+
+body.dark-mode .login-container {
+  background: var(--color-bg-secondary);
+  color: var(--color-text);
+}
+
+body.dark-mode .login-container input {
+  background: var(--color-bg);
+  border-color: #555;
+  color: var(--color-text);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .content {
+    margin-left: 0;
+    padding: 1.5rem;
+  }
+
+  .sidebar {
+    position: relative;
+    width: 100%;
+    height: auto;
+    box-shadow: none;
+  }
+
+  .overview-cards {
+    flex-direction: column;
+  }
+
+  table th,
+  table td {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .modal-content {
+    width: 90%;
+  }
+
+  .btn-primary {
+    font-size: 14px;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-container {
+    padding: 30px 20px;
+  }
+
+  .login-container h2.login__title {
+    font-size: 22px;
+  }
+
+  .login-container p.login__desc {
+    font-size: 13px;
+  }
+
+  table th,
+  table td {
+    font-size: 12px;
+  }
+
+  .overview-cards {
+    gap: 0.8rem;
+  }
+}
