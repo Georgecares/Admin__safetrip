@@ -23,21 +23,21 @@ async function loginAdmin(email, password) {
     if (!res.ok) throw new Error("Login failed");
     const data = await res.json();
     const token = data?.data?.token;
-    const role = data?.data?.role; // ensure API returns role
+    const role = data?.data?.role;
 
-    if (token) {
+    if (token && role) {
       localStorage.setItem("authToken", token);
-      localStorage.setItem("userRole", role);
       localStorage.setItem("isLoggedIn", "true");
+      localStorage.setItem("userRole", role);
 
       // Redirect based on role
       if (role === "admin") {
-        window.location.href = "admin/index.html";
+        window.location.href = "admin/index.html"; // Admin dashboard
       } else {
-        window.location.href = "index.html"; // normal user dashboard
+        window.location.href = "index.html"; // Normal user dashboard
       }
     } else {
-      alert("Login did not return a token.");
+      alert("Login did not return a token or role.");
     }
   } catch (err) {
     console.error(err);
@@ -56,25 +56,52 @@ async function logoutAdmin() {
     console.warn("Logout API call failed but proceeding.");
   }
   localStorage.clear();
-  window.location.href = "../login.html";
+  window.location.href = "login.html";
 }
 
 // ====== AUTH GUARD ======
-// Protect admin pages
-const token = localStorage.getItem("authToken");
-const role = localStorage.getItem("userRole");
-if (
-  window.location.pathname.includes("admin/") &&
-  (!token || role !== "admin")
-) {
-  alert("Access denied. Admins only.");
-  window.location.href = "../login.html";
-}
+(function authGuard() {
+  const token = localStorage.getItem("authToken");
+  const role = localStorage.getItem("userRole");
+  const path = window.location.pathname;
+  const isLoginPage = path.includes("login.html");
+  const isAdminPage = path.includes("admin/index.html");
+  const isUserPage = path.includes("index.html") && !isAdminPage;
+
+  // Not logged in → redirect to login
+  if (!token && !isLoginPage) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  // Logged in → redirect to correct dashboard if on login page
+  if (token && isLoginPage) {
+    if (role === "admin") {
+      window.location.href = "admin/index.html";
+    } else {
+      window.location.href = "index.html";
+    }
+    return;
+  }
+
+  // Block non-admin from admin page
+  if (isAdminPage && role !== "admin") {
+    alert("Access denied. Admins only.");
+    window.location.href = "login.html";
+    return;
+  }
+
+  // Optional: redirect admin away from normal user page
+  if (isUserPage && role === "admin") {
+    window.location.href = "admin/index.html";
+    return;
+  }
+})();
 
 // ====== FETCH USERS ======
 async function fetchUsers() {
   const token = localStorage.getItem("authToken");
-  if (!token) return (window.location.href = "../login.html");
+  if (!token) return (window.location.href = "login.html");
 
   try {
     const res = await fetch(USERS_URL, {
@@ -124,7 +151,7 @@ async function fetchCheckins() {
   }
 }
 
-// ====== CRUD (Users) ======
+// ====== CRUD USERS ======
 async function addOrEditUser(id, name, email, role) {
   const token = localStorage.getItem("authToken");
   const method = id ? "PUT" : "POST";
@@ -139,7 +166,6 @@ async function addOrEditUser(id, name, email, role) {
       },
       body: JSON.stringify({ name, email, role }),
     });
-
     if (!res.ok) throw new Error("Save failed");
     await fetchUsers();
     closeModal();
@@ -166,7 +192,7 @@ async function deleteUser(id) {
   }
 }
 
-// ====== CRUD (SOS Alerts) ======
+// ====== CRUD SOS ======
 async function updateSOSStatus(id, status) {
   const token = localStorage.getItem("authToken");
   try {
@@ -202,7 +228,7 @@ async function deleteSOS(id) {
   }
 }
 
-// ====== CRUD (Check-ins) ======
+// ====== CRUD CHECKINS ======
 async function deleteCheckin(id) {
   if (!confirm("Delete this check-in?")) return;
   const token = localStorage.getItem("authToken");
@@ -219,7 +245,7 @@ async function deleteCheckin(id) {
   }
 }
 
-// ====== RENDER USERS ======
+// ====== RENDER FUNCTIONS ======
 function renderUsers() {
   const tbody = document.querySelector("#userTable tbody");
   if (!tbody) return;
@@ -241,7 +267,6 @@ function renderUsers() {
     .join("");
 }
 
-// ====== RENDER SOS ALERTS ======
 function renderSOSAlerts() {
   const tbody = document.querySelector("#sosTable tbody");
   if (!tbody) return;
@@ -268,7 +293,6 @@ function renderSOSAlerts() {
     .join("");
 }
 
-// ====== RENDER CHECKINS ======
 function renderCheckins() {
   const tbody = document.querySelector("#checkinTable tbody");
   if (!tbody) return;
