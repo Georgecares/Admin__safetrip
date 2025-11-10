@@ -23,11 +23,19 @@ async function loginAdmin(email, password) {
     if (!res.ok) throw new Error("Login failed");
     const data = await res.json();
     const token = data?.data?.token;
+    const role = data?.data?.role; // ensure API returns role
 
     if (token) {
       localStorage.setItem("authToken", token);
+      localStorage.setItem("userRole", role);
       localStorage.setItem("isLoggedIn", "true");
-      window.location.href = "index.html";
+
+      // Redirect based on role
+      if (role === "admin") {
+        window.location.href = "admin/index.html";
+      } else {
+        window.location.href = "index.html"; // normal user dashboard
+      }
     } else {
       alert("Login did not return a token.");
     }
@@ -48,13 +56,25 @@ async function logoutAdmin() {
     console.warn("Logout API call failed but proceeding.");
   }
   localStorage.clear();
-  window.location.href = "login.html";
+  window.location.href = "../login.html";
+}
+
+// ====== AUTH GUARD ======
+// Protect admin pages
+const token = localStorage.getItem("authToken");
+const role = localStorage.getItem("userRole");
+if (
+  window.location.pathname.includes("admin/") &&
+  (!token || role !== "admin")
+) {
+  alert("Access denied. Admins only.");
+  window.location.href = "../login.html";
 }
 
 // ====== FETCH USERS ======
 async function fetchUsers() {
   const token = localStorage.getItem("authToken");
-  if (!token) return (window.location.href = "login.html");
+  if (!token) return (window.location.href = "../login.html");
 
   try {
     const res = await fetch(USERS_URL, {
@@ -352,7 +372,7 @@ themeToggle?.addEventListener("click", () => {
 });
 
 // ====== INIT ======
-if (window.location.pathname.includes("index.html")) {
+if (window.location.pathname.includes("admin/index.html")) {
   fetchOverview();
   fetchUsers();
 }
